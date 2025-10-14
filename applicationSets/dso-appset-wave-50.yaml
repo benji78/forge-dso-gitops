@@ -16,8 +16,8 @@ spec:
     - matrix:
         generators:
           - git:
-              repoURL: https://github.com/benji78/pi-native-socle.git
-              revision: gitops
+              repoURL: https://github.com/benji78/forge-dso-gitops.git
+              revision: main
               files:
                 - path: "gitops/envs/conf-dso/conf-dso.json"
               requeueAfterSeconds: 10 # Polling interval for health_status (seconds)
@@ -47,7 +47,7 @@ spec:
       project: default
       revisionHistoryLimit: 3
       source:
-        repoURL: https://github.com/benji78/pi-native-socle.git
+        repoURL: https://github.com/benji78/forge-dso-gitops.git
         path: "gitops/envs/{{.env}}/apps/{{.app}}"
         targetRevision: "{{.targetRevision}}"
         plugin:
