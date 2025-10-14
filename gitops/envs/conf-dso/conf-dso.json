@@ -2,7 +2,7 @@
   "env": "conf-dso",
   "provider": "self-hosted",
   "region": "fr-par",
-  "namespacePrefix": "dso-dev-",
+  "namespacePrefix": "dso-",
   "destination": {
     "clusterName": "in-cluster"
   },
