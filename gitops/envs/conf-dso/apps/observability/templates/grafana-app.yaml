@@ -1,0 +1,31 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: "s3ns-dev-dso-grafana"
+  namespace: infra-argocd
+spec:
+  destination:
+    namespace: dso-grafana
+    name: {{ .Values.destinationClusterName }}
+  project: default
+  sources:
+  - chart: dso-grafana
+    repoURL: https://cloud-pi-native.github.io/helm-charts
+    targetRevision: '>=1.0.0 <2.0.0'
+    helm:  
+      values: |
+        {{ .Values.grafana | toYaml | nindent 8 }}
+      valueFiles:
+      - ./values.yaml
+      - $tenants/helm/values.yaml
+  - ref: tenants
+    repoURL: "https://<path:dso-s3ns-dev/data/env/conf-dso/apps/global/values#domain | jsonPath {.gitlab}>/observability/observability.git"
+    targetRevision: main
+  syncPolicy:
+    automated:
+      prune: true
+    #  selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ApplyOutOfSyncOnly=true
+      - ServerSideApply=true

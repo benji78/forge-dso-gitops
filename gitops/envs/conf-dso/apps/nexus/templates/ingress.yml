@@ -1,0 +1,28 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: nexus-alternative
+  namespace: dso-nexus
+  annotations:
+    cert-manager.io/cluster-issuer: acme-issuer
+    route.openshift.io/termination: edge
+  labels:
+    app: nexus
+spec:
+  tls:
+  - hosts:
+    - <path:dso-s3ns-dev/data/env/conf-dso/apps/global/values#domain | jsonPath {.nexus}>
+    secretName: nexus-tls-secret
+  ingressClassName: "<path:dso-s3ns-dev/data/env/conf-dso/apps/global/values#ingressClassName>"
+  rules:
+    - host: <path:dso-s3ns-dev/data/env/conf-dso/apps/global/values#domain | jsonPath {.nexus}>
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: nexus
+                port:
+                  name: http

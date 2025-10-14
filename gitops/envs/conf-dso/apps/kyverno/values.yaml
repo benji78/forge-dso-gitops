@@ -1,0 +1,5 @@
+kyverno:
+  global:
+    image:
+      registry: <path:dso-s3ns-dev/data/env/conf-dso/apps/global/values#image | jsonPath
+        {.repository.ghcr}>

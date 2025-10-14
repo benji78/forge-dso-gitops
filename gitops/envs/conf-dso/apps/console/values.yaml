@@ -1,0 +1,247 @@
+cluster:
+  cluster:
+    enablePDB: false
+    imageName: <path:dso-s3ns-dev/data/env/conf-dso/apps/global/values#image | jsonPath
+      {.repository.ghcr}>/cloudnative-pg/postgresql:16.2
+    initdb:
+      database: dso-console-db
+      owner: dso
+    monitoring:
+      enabled: false
+    postgresql:
+      parameters:
+        max_worker_processes: '60'
+      pg_hba:
+      - host dso-console-db dso all md5
+      - host dso-console-db streaming_replica all md5
+    primaryUpdateMethod: restart
+    storage:
+      size: 10Gi
+  fullnameOverride: pg-cluster-console
+  nameOverride: pg-cluster-console
+console:
+  client:
+    affinity:
+      podAntiAffinity:
+        preferredDuringSchedulingIgnoredDuringExecution:
+        - podAffinityTerm:
+            labelSelector:
+              matchLabels:
+                app.kubernetes.io/instance: s3ns-dev-dso-console
+                app.kubernetes.io/name: conf-dso-cpn-console-client
+            topologyKey: kubernetes.io/hostname
+          weight: 100
+    autoscaling:
+      enabled: false
+      maxReplicas: 3
+      minReplicas: 1
+      targetCPUUtilizationPercentage: 80
+      targetMemoryUtilizationPercentage: 80
+    container:
+      port: 8080
+      securityContext:
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop:
+          - ALL
+        runAsNonRoot: true
+        runAsUser: 1001
+        seccompProfile:
+          type: RuntimeDefault
+    healthcheckPath: /
+    image:
+      repository: <path:dso-s3ns-dev/data/env/conf-dso/apps/global/values#image |
+        jsonPath {.repository.ghcr}>/cloud-pi-native/console/client
+    livenessProbe:
+      enabled: true
+      failureThreshold: 3
+      initialDelaySeconds: 30
+      periodSeconds: 30
+      successThreshold: 1
+      timeoutSeconds: 5
+    readinessProbe:
+      enabled: true
+      failureThreshold: 2
+      initialDelaySeconds: 15
+      periodSeconds: 10
+      successThreshold: 2
+      timeoutSeconds: 5
+    replicaCount: 1
+    resources:
+      limits:
+        cpu: 500m
+        memory: 512Mi
+      requests:
+        cpu: 250m
+        memory: 128Mi
+    service:
+      port: 80
+      type: ClusterIP
+    startupProbe:
+      enabled: true
+      failureThreshold: 10
+      initialDelaySeconds: 0
+      periodSeconds: 10
+      successThreshold: 1
+      timeoutSeconds: 5
+    strategy:
+      type: RollingUpdate
+  config:
+    create: true
+    name: dso-config
+    projectsRootDir: forge
+    secrets:
+      ARGOCD_URL: https://<path:dso-s3ns-dev/data/env/conf-dso/apps/global/values#domain|
+        jsonPath {.argocd}>/
+      ARGO_NAMESPACE: dso-argocd
+      GITLAB_TOKEN: <path:dso-s3ns-dev/data/env/conf-dso/apps/gitlab/values#gitlabToken>
+      GITLAB_URL: https://<path:dso-s3ns-dev/data/env/conf-dso/apps/global/values#domain|
+        jsonPath {.gitlab}>/
+      HARBOR_ADMIN: admin
+      HARBOR_ADMIN_PASSWORD: <path:dso-s3ns-dev/data/env/conf-dso/apps/harbor/values#global|
+        jsonPath {.harborAdminPassword}>
+      HARBOR_URL: https://<path:dso-s3ns-dev/data/env/conf-dso/apps/global/values#domain|
+        jsonPath {.harbor}>/
+      KEYCLOAK_ADMIN: dsoadmin
+      KEYCLOAK_ADMIN_PASSWORD: <path:dso-s3ns-dev/data/env/conf-dso/apps/keycloak/values#auth|
+        jsonPath {.adminPassword}>
+      KEYCLOAK_URL: http://auth.dso-keycloak.svc.cluster.local/realms/dso/.well-known/openid-configuration
+      NEXUS_ADMIN: <path:dso-s3ns-dev/data/env/conf-dso/apps/nexus/values#auth| jsonPath
+        {.adminUsername}>
+      NEXUS_ADMIN_PASSWORD: <path:dso-s3ns-dev/data/env/conf-dso/apps/nexus/values#auth|
+        jsonPath {.adminPassword}>
+      NEXUS_URL: https://<path:dso-s3ns-dev/data/env/conf-dso/apps/global/values#domain|
+        jsonPath {.nexus}>/
+      SONARQUBE_URL: https://<path:dso-s3ns-dev/data/env/conf-dso/apps/global/values#domain|
+        jsonPath {.sonarqube}>/
+      SONAR_API_TOKEN: <path:dso-s3ns-dev/data/env/conf-dso/apps/sonarqube/values#auth|
+        jsonPath {.sonarApiToken}>
+      VAULT_TOKEN: <path:dso-s3ns-dev/data/env/conf-dso/apps/vault/values#vaultToken>
+      VAULT_URL: https://<path:dso-s3ns-dev/data/env/conf-dso/apps/global/values#domain|
+        jsonPath {.vault}>/
+  fullnameOverride: dso-cpn-console
+  global:
+    env:
+      CONTACT_EMAIL: forge@anfsi.interieur.gouv.fr
+      NODE_ENV: production
+    keycloak:
+      clientIds:
+        backend: console-backend
+        frontend: console-frontend
+      clientSecrets:
+        backend: <path:dso-s3ns-dev/data/env/conf-dso/apps/keycloak/values#client|
+          jsonPath {.consoleBackend.secret}>
+      devRealm: false
+      domain:
+        backend: auth.dso-keycloak.svc.cluster.local
+        frontend: <path:dso-s3ns-dev/data/env/conf-dso/apps/global/values#domain|
+          jsonPath {.keycloak}>
+      protocol:
+        backend: http
+        frontend: https
+      realm: dso
+      redirectUri: https://<path:dso-s3ns-dev/data/env/conf-dso/apps/global/values#domain|
+        jsonPath {.console}>
+      sessionSecret: a-very-strong-secret-with-more-than-32-char
+    postgresql:
+      cnpgSecretName: pg-cluster-console-app
+  ingress:
+    annotations:
+      cert-manager.io/cluster-issuer: acme-issuer
+      route.openshift.io/termination: edge
+    className: <path:dso-s3ns-dev/data/env/conf-dso/apps/global/values#ingressClassName>
+    enabled: true
+    hosts:
+    - <path:dso-s3ns-dev/data/env/conf-dso/apps/global/values#domain| jsonPath {.console}>
+    labels: {}
+    tls:
+    - hosts:
+      - <path:dso-s3ns-dev/data/env/conf-dso/apps/global/values#domain| jsonPath {.console}>
+      secretName: tls-secret
+  nameOverride: conf-dso-cpn-console
+  postgres:
+    image:
+      registry: <path:dso-s3ns-dev/data/env/conf-dso/apps/global/values#image | jsonPath
+        {.repository.ghcr}>
+      repository: postgres:15.3
+  postgresql:
+    architecture: standalone
+    enabled: false
+    nameOverride: cpn-console-db
+  server:
+    affinity:
+      podAntiAffinity:
+        preferredDuringSchedulingIgnoredDuringExecution:
+        - podAffinityTerm:
+            labelSelector:
+              matchLabels:
+                app.kubernetes.io/instance: s3ns-dev-dso-console
+                app.kubernetes.io/name: conf-dso-cpn-console-server
+            topologyKey: kubernetes.io/hostname
+          weight: 100
+    autoscaling:
+      enabled: false
+      maxReplicas: 3
+      minReplicas: 1
+      targetCPUUtilizationPercentage: 80
+      targetMemoryUtilizationPercentage: 80
+    container:
+      port: 8080
+      securityContext:
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop:
+          - ALL
+        runAsNonRoot: true
+        runAsUser: 1000
+        seccompProfile:
+          type: RuntimeDefault
+    disabledPlugins: ''
+    envFrom:
+    - secretRef:
+        name: dso-config
+    extraCa:
+      key: ''
+      mountSubPath: ca_certs
+      name: ''
+    healthcheckPath: /api/v1/healthz
+    image:
+      repository: <path:dso-s3ns-dev/data/env/conf-dso/apps/global/values#image |
+        jsonPath {.repository.ghcr}>/cloud-pi-native/console/server
+    livenessProbe:
+      enabled: true
+      failureThreshold: 3
+      initialDelaySeconds: 30
+      periodSeconds: 30
+      successThreshold: 1
+      timeoutSeconds: 5
+    readinessProbe:
+      enabled: true
+      failureThreshold: 2
+      initialDelaySeconds: 15
+      periodSeconds: 10
+      successThreshold: 2
+      timeoutSeconds: 5
+    replicaCount: 1
+    resources:
+      limits:
+        cpu: 500m
+        memory: 512Mi
+      requests:
+        cpu: 250m
+        memory: 128Mi
+    service:
+      port: 80
+      type: ClusterIP
+    serviceAccount:
+      create: true
+      name: cpn-console-server
+    startupProbe:
+      enabled: true
+      failureThreshold: 10
+      initialDelaySeconds: 0
+      periodSeconds: 10
+      successThreshold: 1
+      timeoutSeconds: 5
+    strategy:
+      type: RollingUpdate

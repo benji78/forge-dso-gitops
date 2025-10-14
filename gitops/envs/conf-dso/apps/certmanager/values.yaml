@@ -1,0 +1,73 @@
+certmanager:
+  acmesolver:
+    image:
+      repository: <path:dso-s3ns-dev/data/env/conf-dso/apps/global/values#image |
+        jsonPath {.repository.quay}>/jetstack/cert-manager-acmesolver
+  affinity:
+    podAntiAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+      - podAffinityTerm:
+          labelSelector:
+            matchLabels:
+              app.kubernetes.io/component: controller
+              app.kubernetes.io/instance: s3ns-dev-cert-manager
+              app.kubernetes.io/name: cert-manager
+          topologyKey: kubernetes.io/hostname
+        weight: 100
+  cainjector:
+    affinity:
+      podAntiAffinity:
+        preferredDuringSchedulingIgnoredDuringExecution:
+        - podAffinityTerm:
+            labelSelector:
+              matchLabels:
+                app.kubernetes.io/component: cainjector
+                app.kubernetes.io/instance: s3ns-dev-cert-manager
+                app.kubernetes.io/name: cainjector
+            topologyKey: kubernetes.io/hostname
+          weight: 100
+    image:
+      repository: <path:dso-s3ns-dev/data/env/conf-dso/apps/global/values#image |
+        jsonPath {.repository.quay}>/jetstack/cert-manager-cainjector
+  crds:
+    enabled: true
+    keep: true
+  fullnameOverride: cert-manager
+  global:
+    leaderElection:
+      namespace: cert-manager
+  image:
+    repository: <path:dso-s3ns-dev/data/env/conf-dso/apps/global/values#image | jsonPath
+      {.repository.quay}>/jetstack/cert-manager-controller
+  namespace: cert-manager
+  startupapicheck:
+    image:
+      repository: <path:dso-s3ns-dev/data/env/conf-dso/apps/global/values#image |
+        jsonPath {.repository.quay}>/jetstack/cert-manager-startupapicheck
+  startupapicheck-job:
+    affinity:
+      podAntiAffinity:
+        preferredDuringSchedulingIgnoredDuringExecution:
+        - podAffinityTerm:
+            labelSelector:
+              matchLabels:
+                app.kubernetes.io/component: startupapicheck
+                app.kubernetes.io/instance: s3ns-dev-cert-manager
+                app.kubernetes.io/name: startupapicheck
+            topologyKey: kubernetes.io/hostname
+          weight: 100
+  webhook:
+    affinity:
+      podAntiAffinity:
+        preferredDuringSchedulingIgnoredDuringExecution:
+        - podAffinityTerm:
+            labelSelector:
+              matchLabels:
+                app.kubernetes.io/component: webhook
+                app.kubernetes.io/instance: s3ns-dev-cert-manager
+                app.kubernetes.io/name: webhook
+            topologyKey: kubernetes.io/hostname
+          weight: 100
+    image:
+      repository: <path:dso-s3ns-dev/data/env/conf-dso/apps/global/values#image |
+        jsonPath {.repository.quay}>/jetstack/cert-manager-webhook

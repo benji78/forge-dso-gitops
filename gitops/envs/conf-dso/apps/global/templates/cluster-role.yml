@@ -1,0 +1,24 @@
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: dsc-access-role
+rules:
+  - apiGroups: ["cloud-pi-native.fr"]
+    resources: ["dso-socle-configs"]
+    verbs: ["list", "get"]
+  - apiGroups: [""]
+    resources: ["configmaps"]
+    verbs: ["list", "get"]
+    resourceNames:
+      - "kube-root-ca.crt"
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: cpn-ansible-job-role
+rules:
+  - apiGroups: [""]
+    resources: ["secrets"]
+    verbs: ["list", "get"]
+    resourceNames: ["dso-config"]
