@@ -4,7 +4,7 @@
   "region": "fr-par",
   "namespacePrefix": "dso-dev-",
   "destination": {
-    "clusterName": "s3ns-dev"
+    "clusterName": "in-cluster"
   },
   "targetRevision": "main",
   "apps": [
