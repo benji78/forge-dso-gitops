@@ -82,12 +82,6 @@ keycloak:
   - name: DSFR_THEME_HOME_URL
     value: https://<path:dso-s3ns-dev/data/env/conf-dso/apps/global/values#domain
       | jsonPath {.console}>
-  - name: DSFR_THEME_SERVICE_TITLE
-    value: Cloud Pi Native
-  - name: DSFR_THEME_BRAND_TOP
-    value: Ministere<br/>de l'interieur
-  - name: DSFR_THEME_CONTACT_EMAIL
-    value: cloudpinative-relations@interieur.gouv.fr
   extraEnvVarsCM: ''
   extraEnvVarsSecret: ''
   extraStartupArgs: ''
