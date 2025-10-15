@@ -1,17 +1,17 @@
 awx:
   AWX:
-    control_plane_ee_image: <path:dso-s3ns-dev/data/env/conf-dso/apps/global/values#image
+    control_plane_ee_image: <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#image
       | jsonPath {.repository.quay}>/ansible/awx-ee:24.6.1
     ee_images:
-    - image: <path:dso-s3ns-dev/data/env/conf-dso/apps/global/values#image | jsonPath
+    - image: <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#image | jsonPath
         {.repository.quay}>/ansible/awx-ee:24.6.1
       name: AWX EE (24.6.1)
     enabled: true
     extra_settings: null
-    image: <path:dso-s3ns-dev/data/env/conf-dso/apps/global/values#image | jsonPath
+    image: <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#image | jsonPath
       {.repository.quay}>/ansible/awx
     image_version: 24.6.1
-    init_container_image: <path:dso-s3ns-dev/data/env/conf-dso/apps/global/values#image
+    init_container_image: <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#image
       | jsonPath {.repository.quay}>/ansible/awx-ee
     init_container_image_version: 24.6.1
     name: awx-operator
@@ -19,7 +19,7 @@ awx:
       dbName: awx
       enabled: true
       host: pg-cluster-awx-rw
-      password: <path:dso-s3ns-dev/data/env/conf-dso/apps/awx/values#auth | jsonPath
+      password: <path:dso-gcp-dev/data/env/conf-dso/apps/awx/values#auth | jsonPath
         {.adminPassword}>
       port: 5432
       sslmode: prefer
@@ -27,7 +27,7 @@ awx:
       username: awx
     rbac:
       create: true
-    redis_image: <path:dso-s3ns-dev/data/env/conf-dso/apps/global/values#image | jsonPath
+    redis_image: <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#image | jsonPath
       {.repository.quay}>/redis
     redis_image_version: '7'
     spec:
@@ -35,9 +35,9 @@ awx:
         ''route.openshift.io/termination'': ''edge''}
 
         '
-      ingress_class_name: <path:dso-s3ns-dev/data/env/conf-dso/apps/global/values#ingressClassName>
+      ingress_class_name: <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#ingressClassName>
       ingress_hosts:
-      - hostname: <path:dso-s3ns-dev/data/env/conf-dso/apps/global/values#domain |
+      - hostname: <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#domain |
           jsonPath {.awx}>
       ingress_type: ingress
       service_type: ClusterIP
@@ -74,6 +74,6 @@ cpn-ansible-job:
     - secretRef:
         name: ansible-secret
     image:
-      repository: <path:dso-s3ns-dev/data/env/conf-dso/apps/global/values#image |
-        jsonPath {.repository.ghcr}>/cloud-pi-native/git-ansible
+      repository: <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#image | jsonPath
+        {.repository.ghcr}>/cloud-pi-native/git-ansible
       tag: '1'

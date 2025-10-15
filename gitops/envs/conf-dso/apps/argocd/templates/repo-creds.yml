@@ -8,8 +8,8 @@ metadata:
   namespace: dso-argocd
 type: Opaque
 stringData:
-  password: <path:dso-s3ns-dev/data/env/conf-dso/apps/gitlab/values#gitlabToken>
-  url: "https://<path:dso-s3ns-dev/data/env/conf-dso/apps/global/values#domain | jsonPath {.gitlab}>/forge"
+  password: <path:dso-gcp-dev/data/env/conf-dso/apps/gitlab/values#gitlabToken>
+  url: "https://<path:dso-gcp-dev/data/env/conf-dso/apps/global/values#domain | jsonPath {.gitlab}>/forge"
   username: "root"
 ---
 apiVersion: v1
@@ -24,5 +24,5 @@ stringData:
   name: bitnamicharts
   type: helm
   enableOCI: "true"
-  username: <path:dso-s3ns-dev/data/env/conf-dso/apps/global/values#dockerAccount | jsonPath {.username}>
-  password: <path:dso-s3ns-dev/data/env/conf-dso/apps/global/values#dockerAccount | jsonPath {.password}>
+  username: <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#dockerAccount | jsonPath {.username}>
+  password: <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#dockerAccount | jsonPath {.password}>

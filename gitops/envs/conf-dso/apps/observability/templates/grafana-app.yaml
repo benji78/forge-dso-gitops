@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: "s3ns-dev-dso-grafana"
+  name: "gcp-dev-dso-grafana"
   namespace: infra-argocd
 spec:
   destination:
@@ -19,7 +19,7 @@ spec:
       - ./values.yaml
       - $tenants/helm/values.yaml
   - ref: tenants
-    repoURL: "https://<path:dso-s3ns-dev/data/env/conf-dso/apps/global/values#domain | jsonPath {.gitlab}>/observability/observability.git"
+    repoURL: "https://<path:dso-gcp-dev/data/env/conf-dso/apps/global/values#domain | jsonPath {.gitlab}>/observability/observability.git"
     targetRevision: main
   syncPolicy:
     automated:

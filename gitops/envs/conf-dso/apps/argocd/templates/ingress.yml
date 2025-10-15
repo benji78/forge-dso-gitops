@@ -9,13 +9,13 @@ metadata:
     route.openshift.io/termination: edge
   labels:
 spec:
-  ingressClassName: <path:dso-s3ns-dev/data/env/conf-dso/apps/global/values#ingressClassName>
+  ingressClassName: <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#ingressClassName>
   tls:
   - hosts:
-    - <path:dso-s3ns-dev/data/env/conf-dso/apps/global/values#domain | jsonPath {.argocd}>
+    - <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#domain | jsonPath {.argocd}>
     secretName: argocd-tls-secret
   rules:
-    - host: <path:dso-s3ns-dev/data/env/conf-dso/apps/global/values#domain | jsonPath {.argocd}>
+    - host: <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#domain | jsonPath {.argocd}>
       http:
         paths:
           - path: /
@@ -37,13 +37,13 @@ metadata:
     route.openshift.io/termination: edge
   labels:
 spec:
-  ingressClassName: <path:dso-s3ns-dev/data/env/conf-dso/apps/global/values#ingressClassName>
+  ingressClassName: <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#ingressClassName>
   tls:
   - hosts:
-    - appset.<path:dso-s3ns-dev/data/env/conf-dso/apps/global/values#domain | jsonPath {.argocd}>
+    - appset.<path:dso-gcp-dev/data/env/conf-dso/apps/global/values#domain | jsonPath {.argocd}>
     secretName: argocd-appset-tls-secret
   rules:
-    - host: appset.<path:dso-s3ns-dev/data/env/conf-dso/apps/global/values#domain | jsonPath {.argocd}>
+    - host: appset.<path:dso-gcp-dev/data/env/conf-dso/apps/global/values#domain | jsonPath {.argocd}>
       http:
         paths:
           - path: /api/webhook
