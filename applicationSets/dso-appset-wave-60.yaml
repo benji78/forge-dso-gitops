@@ -2,7 +2,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
-  name: s3ns-dev-dso-install-manager-wave-60
+  name: gcp-dev-dso-install-manager-wave-60
   namespace: infra-argocd
   annotations:
     argocd.argoproj.io/sync-wave: "60"
@@ -34,7 +34,7 @@ spec:
                   values: ["60"]
   template:
     metadata:
-      name: "s3ns-dev-{{.namespacePrefix}}{{.app}}"
+      name: "gcp-dev-{{.namespacePrefix}}{{.app}}"
       annotations:
         argocd.argoproj.io/compare-options: ServerSideDiff=true
       labels:

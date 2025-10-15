@@ -3,10 +3,10 @@ kind: Secret
 metadata:
   labels:
     argocd.argoproj.io/secret-type: repository
-  name: "s3ns-dev-observability-gitlab-token"
+  name: "gcp-dev-observability-gitlab-token"
   namespace: infra-argocd
 type: Opaque
 stringData:
-  password: <path:dso-s3ns-dev/data/env/conf-dso/apps/gitlab/values#gitlabToken>
-  url: "https://<path:dso-s3ns-dev/data/env/conf-dso/apps/global/values#domain | jsonPath {.gitlab}>/observability/observability.git"
+  password: <path:dso-gcp-dev/data/env/conf-dso/apps/gitlab/values#gitlabToken>
+  url: "https://<path:dso-gcp-dev/data/env/conf-dso/apps/global/values#domain | jsonPath {.gitlab}>/observability/observability.git"
   username: "root"

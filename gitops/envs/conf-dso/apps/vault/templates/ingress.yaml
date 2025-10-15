@@ -12,11 +12,11 @@ metadata:
 spec:
   tls:
     - hosts:
-        - <path:dso-s3ns-dev/data/env/conf-dso/apps/global/values#domain | jsonPath {.vault}>
+        - <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#domain | jsonPath {.vault}>
       secretName: vault-tls-secret
-  ingressClassName: <path:dso-s3ns-dev/data/env/conf-dso/apps/global/values#ingressClassName>
+  ingressClassName: <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#ingressClassName>
   rules:
-    - host: <path:dso-s3ns-dev/data/env/conf-dso/apps/global/values#domain | jsonPath {.vault}>
+    - host: <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#domain | jsonPath {.vault}>
       http:
         paths:
           - path: /

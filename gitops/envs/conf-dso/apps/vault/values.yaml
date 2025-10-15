@@ -18,26 +18,26 @@ cpn-ansible-job:
     - secretRef:
         name: ansible-secret
     image:
-      repository: <path:dso-s3ns-dev/data/env/conf-dso/apps/global/values#image |
-        jsonPath {.repository.ghcr}>/cloud-pi-native/git-ansible
+      repository: <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#image | jsonPath
+        {.repository.ghcr}>/cloud-pi-native/git-ansible
       tag: '1'
 vault:
   csi:
     agent:
       image:
-        repository: <path:dso-s3ns-dev/data/env/conf-dso/apps/global/values#image
-          | jsonPath {.repository.docker}>/hashicorp/vault
+        repository: <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#image |
+          jsonPath {.repository.docker}>/hashicorp/vault
     image:
-      repository: <path:dso-s3ns-dev/data/env/conf-dso/apps/global/values#image |
-        jsonPath {.repository.docker}>/hashicorp/vault-csi-provider
+      repository: <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#image | jsonPath
+        {.repository.docker}>/hashicorp/vault-csi-provider
   fullnameOverride: conf-dso-vault
   injector:
     agentImage:
-      repository: <path:dso-s3ns-dev/data/env/conf-dso/apps/global/values#image |
-        jsonPath {.repository.docker}>/hashicorp/vault
+      repository: <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#image | jsonPath
+        {.repository.docker}>/hashicorp/vault
     image:
-      repository: <path:dso-s3ns-dev/data/env/conf-dso/apps/global/values#image |
-        jsonPath {.repository.docker}>/hashicorp/vault-k8s
+      repository: <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#image | jsonPath
+        {.repository.docker}>/hashicorp/vault-k8s
     securityContext:
       container:
         allowPrivilegeEscalation: false
@@ -56,15 +56,15 @@ vault:
       enable: true
       size: 23Gi
     ha:
-      apiAddr: https://<path:dso-s3ns-dev/data/env/conf-dso/apps/global/values#domain
+      apiAddr: https://<path:dso-gcp-dev/data/env/conf-dso/apps/global/values#domain
         | jsonPath {.vault}>
       enabled: true
       raft:
         enabled: true
       replicas: 3
     image:
-      repository: <path:dso-s3ns-dev/data/env/conf-dso/apps/global/values#image |
-        jsonPath {.repository.docker}>/hashicorp/vault
+      repository: <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#image | jsonPath
+        {.repository.docker}>/hashicorp/vault
     route:
       enabled: false
     standalone:

@@ -1,7 +1,7 @@
 cluster:
   cluster:
     enablePDB: false
-    imageName: <path:dso-s3ns-dev/data/env/conf-dso/apps/global/values#image | jsonPath
+    imageName: <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#image | jsonPath
       {.repository.ghcr}>/cloudnative-pg/postgresql:16.2
     initdb:
       database: sonardb
@@ -35,8 +35,8 @@ cpn-ansible-job:
     - secretRef:
         name: ansible-secret
     image:
-      repository: <path:dso-s3ns-dev/data/env/conf-dso/apps/global/values#image |
-        jsonPath {.repository.ghcr}>/cloud-pi-native/git-ansible
+      repository: <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#image | jsonPath
+        {.repository.ghcr}>/cloud-pi-native/git-ansible
       tag: '1'
 sonarqube:
   account:
@@ -58,16 +58,16 @@ sonarqube:
           labelSelector:
             matchLabels:
               app.kubernetes.io/component: sonarqube-sonarqube
-              app.kubernetes.io/instance: s3ns-dev-dso-sonarqube
-              app.kubernetes.io/name: s3ns-dev-dso-sonarqube
+              app.kubernetes.io/instance: gcp-dev-dso-sonarqube
+              app.kubernetes.io/name: gcp-dev-dso-sonarqube
           topologyKey: kubernetes.io/hostname
         weight: 100
-  curlContainerImage: <path:dso-s3ns-dev/data/env/conf-dso/apps/global/values#image
+  curlContainerImage: <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#image
     | jsonPath {.repository.docker}>/curlimages/curl:8.11.0
   fullnameOverride: sonarqube-sonarqube
   image:
     pullPolicy: IfNotPresent
-    repository: <path:dso-s3ns-dev/data/env/conf-dso/apps/global/values#image | jsonPath
+    repository: <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#image | jsonPath
       {.repository.docker}>/sonarqube
   ingress:
     annotations:
@@ -76,17 +76,16 @@ sonarqube:
       route.openshift.io/termination: edge
     enabled: true
     hosts:
-    - name: <path:dso-s3ns-dev/data/env/conf-dso/apps/global/values#domain | jsonPath
+    - name: <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#domain | jsonPath
         {.sonarqube}>
       path: /
       pathType: Prefix
-    ingressClassName: <path:dso-s3ns-dev/data/env/conf-dso/apps/global/values#ingressClassName>
+    ingressClassName: <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#ingressClassName>
     labels:
       app: sonar
     tls:
     - hosts:
-      - <path:dso-s3ns-dev/data/env/conf-dso/apps/global/values#domain | jsonPath
-        {.sonarqube}>
+      - <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#domain | jsonPath {.sonarqube}>
       secretName: sonar-tls-secret
   initFs:
     enabled: false
@@ -120,19 +119,19 @@ sonarqube:
   sonarProperties:
     sonar.auth.oidc.allowUsersToSignUp: 'true'
     sonar.auth.oidc.autoLogin: 'false'
-    sonar.auth.oidc.clientId.secured: <path:dso-s3ns-dev/data/env/conf-dso/apps/keycloak/values#client
+    sonar.auth.oidc.clientId.secured: <path:dso-gcp-dev/data/env/conf-dso/apps/keycloak/values#client
       | jsonPath {.sonar.id}>
-    sonar.auth.oidc.clientSecret.secured: <path:dso-s3ns-dev/data/env/conf-dso/apps/keycloak/values#client
+    sonar.auth.oidc.clientSecret.secured: <path:dso-gcp-dev/data/env/conf-dso/apps/keycloak/values#client
       | jsonPath {.sonar.secret}>
     sonar.auth.oidc.enabled: 'true'
     sonar.auth.oidc.groupsSync: 'true'
     sonar.auth.oidc.groupsSync.claimName: groups
-    sonar.auth.oidc.issuerUri: https://<path:dso-s3ns-dev/data/env/conf-dso/apps/global/values#domain
+    sonar.auth.oidc.issuerUri: https://<path:dso-gcp-dev/data/env/conf-dso/apps/global/values#domain
       | jsonPath {.keycloak}>/realms/dso
     sonar.auth.oidc.loginStrategy: Email
     sonar.auth.oidc.loginStrategy.customClaim.name: upn
     sonar.auth.oidc.scopes: openid generic
-    sonar.core.serverBaseURL: https://<path:dso-s3ns-dev/data/env/conf-dso/apps/global/values#domain
+    sonar.core.serverBaseURL: https://<path:dso-gcp-dev/data/env/conf-dso/apps/global/values#domain
       | jsonPath {.sonarqube}>
     sonar.plugins.risk.consent: ACCEPTED
   sonarWebContext: /

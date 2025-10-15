@@ -4,7 +4,7 @@ argocd:
     replicas: 2
     webhook:
       ingress:
-        ingressClassName: <path:dso-s3ns-dev/data/env/conf-dso/apps/global/values#ingressClassName>
+        ingressClassName: <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#ingressClassName>
   configs:
 # BEGIN ANSIBLE MANAGED BLOCK: rbac
     rbac:
@@ -64,17 +64,17 @@ argocd:
           kinds:
           - EphemeralReport
       oidc.config: |
-        issuer: https://<path:dso-s3ns-dev/data/env/conf-dso/apps/global/values#domain | jsonPath {.keycloak}>/realms/dso
+        issuer: https://<path:dso-gcp-dev/data/env/conf-dso/apps/global/values#domain | jsonPath {.keycloak}>/realms/dso
         requestedScopes: ["openid", "generic"]
         name: Keycloak
-        clientID: <path:dso-s3ns-dev/data/env/conf-dso/apps/keycloak/values#client | jsonPath {.argo.id}>
-        clientSecret: <path:dso-s3ns-dev/data/env/conf-dso/apps/keycloak/values#client | jsonPath {.argo.secret}>
+        clientID: <path:dso-gcp-dev/data/env/conf-dso/apps/keycloak/values#client | jsonPath {.argo.id}>
+        clientSecret: <path:dso-gcp-dev/data/env/conf-dso/apps/keycloak/values#client | jsonPath {.argo.secret}>
 # END ANSIBLE MANAGED BLOCK: resource.exclusions and oidc.config
       admin.enabled: 'false'
       clusterResources: 'true'
       kustomize.buildOptions: --enable-helm
-      url: https://<path:dso-s3ns-dev/data/env/conf-dso/apps/global/values#domain
-        | jsonPath {.argocd}>
+      url: https://<path:dso-gcp-dev/data/env/conf-dso/apps/global/values#domain |
+        jsonPath {.argocd}>
       users.anonymous.enabled: 'false'
     params:
       server.insecure: true
@@ -97,30 +97,30 @@ argocd:
     affinity:
       podAntiAffinity: soft
   image:
-    repository: <path:dso-s3ns-dev/data/env/conf-dso/apps/global/values#image | jsonPath
+    repository: <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#image | jsonPath
       {.repository.quay}>
   notifications:
     enabled: false
     webhook:
       ingress:
-        ingressClassName: <path:dso-s3ns-dev/data/env/conf-dso/apps/global/values#ingressClassName>
+        ingressClassName: <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#ingressClassName>
   redis:
     image:
-      repository: <path:dso-s3ns-dev/data/env/conf-dso/apps/global/values#image |
-        jsonPath {.repository.docker}>
+      repository: <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#image | jsonPath
+        {.repository.docker}>
   redis-ha:
     enabled: true
     fullnameOverride: conf-dso-redis-ha
     image:
-      repository: <path:dso-s3ns-dev/data/env/conf-dso/apps/global/values#image |
-        jsonPath {.repository.docker}>/library/redis
+      repository: <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#image | jsonPath
+        {.repository.docker}>/library/redis
       tag: 7.4.1-alpine
   repoServer:
     initContainers: null
     replicas: 3
   server:
     ingress:
-      ingressClassName: <path:dso-s3ns-dev/data/env/conf-dso/apps/global/values#ingressClassName>
+      ingressClassName: <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#ingressClassName>
     ingressGrpc:
-      ingressClassName: <path:dso-s3ns-dev/data/env/conf-dso/apps/global/values#ingressClassName>
+      ingressClassName: <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#ingressClassName>
     replicas: 3

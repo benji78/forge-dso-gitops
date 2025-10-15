@@ -12,11 +12,11 @@ metadata:
 spec:
   tls:
   - hosts:
-    - <path:dso-s3ns-dev/data/env/conf-dso/apps/global/values#domain | jsonPath {.nexus}>
+    - <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#domain | jsonPath {.nexus}>
     secretName: nexus-tls-secret
-  ingressClassName: "<path:dso-s3ns-dev/data/env/conf-dso/apps/global/values#ingressClassName>"
+  ingressClassName: "<path:dso-gcp-dev/data/env/conf-dso/apps/global/values#ingressClassName>"
   rules:
-    - host: <path:dso-s3ns-dev/data/env/conf-dso/apps/global/values#domain | jsonPath {.nexus}>
+    - host: <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#domain | jsonPath {.nexus}>
       http:
         paths:
           - path: /

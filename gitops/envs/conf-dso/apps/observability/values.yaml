@@ -21,10 +21,10 @@ grafana:
           path: roles/gitops/rendering-apps-files/templates/dashboard
           url: https://github.com/cloud-pi-native/socle.git
   grafana:
-    adminPassword: <path:dso-s3ns-dev/data/env/conf-dso/apps/observability/values#grafana|
+    adminPassword: <path:dso-gcp-dev/data/env/conf-dso/apps/observability/values#grafana|
       jsonPath {.adminPassword}>
     isOpenShift: false
-    observatorium_url: https://<path:dso-s3ns-dev/data/env/conf-dso/apps/global/values#domain
+    observatorium_url: https://<path:dso-gcp-dev/data/env/conf-dso/apps/global/values#domain
       | jsonPath {.observatorium}>
   grafana-operator:
     affinity:
@@ -34,7 +34,7 @@ grafana:
             labelSelector:
               matchLabels:
                 app.kubernetes.io/component: operator
-                app.kubernetes.io/instance: s3ns-dev-dso-grafana
+                app.kubernetes.io/instance: gcp-dev-dso-grafana
                 app.kubernetes.io/name: grafana-operator
             topologyKey: kubernetes.io/hostname
           weight: 100
@@ -43,18 +43,18 @@ grafana:
     aud: grafana
     enabled: true
     groups_attribute_path: group
-    id: <path:dso-s3ns-dev/data/env/conf-dso/apps/keycloak/values#client | jsonPath
+    id: <path:dso-gcp-dev/data/env/conf-dso/apps/keycloak/values#client | jsonPath
       {.grafana.id}>
     scopes: profile, email, openid, group
-    secret: <path:dso-s3ns-dev/data/env/conf-dso/apps/keycloak/values#client | jsonPath
+    secret: <path:dso-gcp-dev/data/env/conf-dso/apps/keycloak/values#client | jsonPath
       {.grafana.secret}>
-    url: https://<path:dso-s3ns-dev/data/env/conf-dso/apps/global/values#domain |
-      jsonPath {.keycloak}>/realms/dso
+    url: https://<path:dso-gcp-dev/data/env/conf-dso/apps/global/values#domain | jsonPath
+      {.keycloak}>/realms/dso
   server:
     certManager:
       enabled: true
-    ingressClassName: <path:dso-s3ns-dev/data/env/conf-dso/apps/global/values#ingressClassName>
-    url: <path:dso-s3ns-dev/data/env/conf-dso/apps/global/values#domain | jsonPath
+    ingressClassName: <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#ingressClassName>
+    url: <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#domain | jsonPath
       {.grafana}>
 observatorium:
   affinity:
@@ -64,7 +64,7 @@ observatorium:
           labelSelector:
             matchLabels:
               app.kubernetes.io/component: api
-              app.kubernetes.io/instance: s3ns-dev-dso-observatorium
+              app.kubernetes.io/instance: gcp-dev-dso-observatorium
               app.kubernetes.io/name: observatorium
           topologyKey: kubernetes.io/hostname
         weight: 100
@@ -75,7 +75,7 @@ observatorium:
       groups:
       - /admin
       id: prod-infra
-      issuerURL: https://<path:dso-s3ns-dev/data/env/conf-dso/apps/global/values#domain
+      issuerURL: https://<path:dso-gcp-dev/data/env/conf-dso/apps/global/values#domain
         | jsonPath {.keycloak}>/realms/dso
       name: prod-infra
       usernameClaim: preferred_username
@@ -103,44 +103,43 @@ observatorium:
   ingress:
     enabled: true
     hosts:
-    - host: <path:dso-s3ns-dev/data/env/conf-dso/apps/global/values#domain | jsonPath
+    - host: <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#domain | jsonPath
         {.observatorium}>
       paths:
       - path: /
         pathType: ImplementationSpecific
-    ingressClassName: <path:dso-s3ns-dev/data/env/conf-dso/apps/global/values#ingressClassName>
+    ingressClassName: <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#ingressClassName>
     tls:
     - hosts:
-      - <path:dso-s3ns-dev/data/env/conf-dso/apps/global/values#domain | jsonPath
-        {.observatorium}>
-      secretName: <path:dso-s3ns-dev/data/env/conf-dso/apps/global/values#domain |
+      - <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#domain | jsonPath {.observatorium}>
+      secretName: <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#domain |
         jsonPath {.observatorium}>-tls
   logs:
     enabled: false
     read:
-      endpoint: <path:dso-s3ns-dev/data/env/conf-dso/apps/observability/values#endpoint
+      endpoint: <path:dso-gcp-dev/data/env/conf-dso/apps/observability/values#endpoint
         | jsonPath {.logs}>
     rules:
-      endpoint: <path:dso-s3ns-dev/data/env/conf-dso/apps/observability/values#endpoint
+      endpoint: <path:dso-gcp-dev/data/env/conf-dso/apps/observability/values#endpoint
         | jsonPath {.logs}>
     tail:
-      endpoint: <path:dso-s3ns-dev/data/env/conf-dso/apps/observability/values#endpoint
+      endpoint: <path:dso-gcp-dev/data/env/conf-dso/apps/observability/values#endpoint
         | jsonPath {.logs}>
     write:
-      endpoint: <path:dso-s3ns-dev/data/env/conf-dso/apps/observability/values#endpoint
+      endpoint: <path:dso-gcp-dev/data/env/conf-dso/apps/observability/values#endpoint
         | jsonPath {.logs}>
   metrics:
     alertmanager:
-      endpoint: <path:dso-s3ns-dev/data/env/conf-dso/apps/observability/values#endpoint
+      endpoint: <path:dso-gcp-dev/data/env/conf-dso/apps/observability/values#endpoint
         | jsonPath {.metrics}>
     enabled: false
     read:
-      endpoint: <path:dso-s3ns-dev/data/env/conf-dso/apps/observability/values#endpoint
+      endpoint: <path:dso-gcp-dev/data/env/conf-dso/apps/observability/values#endpoint
         | jsonPath {.metrics}>
     rules:
-      endpoint: <path:dso-s3ns-dev/data/env/conf-dso/apps/observability/values#endpoint
+      endpoint: <path:dso-gcp-dev/data/env/conf-dso/apps/observability/values#endpoint
         | jsonPath {.metrics}>
     tenantHeader: X-Scope-OrgId
     write:
-      endpoint: <path:dso-s3ns-dev/data/env/conf-dso/apps/observability/values#endpoint
+      endpoint: <path:dso-gcp-dev/data/env/conf-dso/apps/observability/values#endpoint
         | jsonPath {.metrics}>

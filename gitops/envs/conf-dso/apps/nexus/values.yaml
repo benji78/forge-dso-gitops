@@ -8,7 +8,7 @@ nexus3:
           labelSelector:
             matchLabels:
               app.kubernetes.io/component: repository
-              app.kubernetes.io/instance: s3ns-dev-dso-nexus
+              app.kubernetes.io/instance: gcp-dev-dso-nexus
               app.kubernetes.io/name: nexus3
           topologyKey: kubernetes.io/hostname
         weight: 100
@@ -39,8 +39,8 @@ nexus3:
         argocd.argoproj.io/hook-delete-policy: HookSucceeded
       image:
         pullPolicy: IfNotPresent
-        repository: <path:dso-s3ns-dev/data/env/conf-dso/apps/global/values#image
-          | jsonPath {.repository.docker}>/alpine/k8s
+        repository: <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#image |
+          jsonPath {.repository.docker}>/alpine/k8s
         tag: 1.31.2
       ttlSecondsAfterFinished: ''
     realms:
@@ -113,8 +113,7 @@ nexus3:
     additionalPorts:
     - containerPort: 5000
       hosts:
-      - <path:dso-s3ns-dev/data/env/conf-dso/apps/global/values#domain | jsonPath
-        {.nexusDockerProxy}>
+      - <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#domain | jsonPath {.nexusDockerProxy}>
       name: dockerproxy
       port: 5000
     port: 8081

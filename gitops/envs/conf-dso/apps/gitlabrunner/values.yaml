@@ -6,14 +6,14 @@ gitlabrunner:
           labelSelector:
             matchLabels:
               app: gitlab-runner
-              release: s3ns-dev-dso-gitlabrunner
+              release: gcp-dev-dso-gitlabrunner
           topologyKey: kubernetes.io/hostname
         weight: 100
   fullnameOverride: gitlab-runner
-  gitlabUrl: https://<path:dso-s3ns-dev/data/env/conf-dso/apps/global/values#domain
+  gitlabUrl: https://<path:dso-gcp-dev/data/env/conf-dso/apps/global/values#domain
     | jsonPath {.gitlab}>/
   image:
-    registry: <path:dso-s3ns-dev/data/env/conf-dso/apps/global/values#image | jsonPath
+    registry: <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#image | jsonPath
       {.repository.gitlab}>
   rbac:
     create: true
@@ -51,7 +51,7 @@ gitlabrunner:
     requests:
       ephemeral-storage: 500Mi
   revisionHistoryLimit: 2
-  runnerToken: <path:dso-s3ns-dev/data/env/conf-dso/apps/gitlab/values#runnerToken>
+  runnerToken: <path:dso-gcp-dev/data/env/conf-dso/apps/gitlab/values#runnerToken>
   runners:
     config: "[[runners]]\n  [runners.kubernetes]\n    namespace = \"dso-gitlab\"\n
       \   image = \"ubuntu:22.04\"\n    # multiple \"always\" to retry pull on fail

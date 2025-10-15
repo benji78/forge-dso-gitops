@@ -1,7 +1,7 @@
 cluster:
   cluster:
     enablePDB: false
-    imageName: <path:dso-s3ns-dev/data/env/conf-dso/apps/global/values#image | jsonPath
+    imageName: <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#image | jsonPath
       {.repository.ghcr}>/cloudnative-pg/postgresql:16.2
     initdb:
       database: keycloak
@@ -43,8 +43,8 @@ cpn-ansible-job:
         name: keycloak-users
       name: users-csv
     image:
-      repository: <path:dso-s3ns-dev/data/env/conf-dso/apps/global/values#image |
-        jsonPath {.repository.ghcr}>/cloud-pi-native/git-ansible
+      repository: <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#image | jsonPath
+        {.repository.ghcr}>/cloud-pi-native/git-ansible
       tag: '1'
 keycloak:
   args: []
@@ -80,7 +80,7 @@ keycloak:
   - name: DSFR_THEME_CONTACT_EMAIL
     value: forge@anfsi.interieur.gouv.fr
   - name: DSFR_THEME_HOME_URL
-    value: https://<path:dso-s3ns-dev/data/env/conf-dso/apps/global/values#domain
+    value: https://<path:dso-gcp-dev/data/env/conf-dso/apps/global/values#domain
       | jsonPath {.console}>
   extraEnvVarsCM: ''
   extraEnvVarsSecret: ''
@@ -92,7 +92,7 @@ keycloak:
   httpRelativePath: /
   image:
     pullPolicy: IfNotPresent
-    registry: <path:dso-s3ns-dev/data/env/conf-dso/apps/global/values#image | jsonPath
+    registry: <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#image | jsonPath
       {.repository.docker}>
     repository: bitnamilegacy/keycloak
   ingress:
@@ -118,9 +118,9 @@ keycloak:
       path: /realms/master/
       pathType: Prefix
     extraRules: []
-    hostname: <path:dso-s3ns-dev/data/env/conf-dso/apps/global/values#domain | jsonPath
+    hostname: <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#domain | jsonPath
       {.keycloak}>
-    ingressClassName: <path:dso-s3ns-dev/data/env/conf-dso/apps/global/values#ingressClassName>
+    ingressClassName: <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#ingressClassName>
     labels:
       app: keycloak
     path: /
@@ -133,11 +133,11 @@ keycloak:
   - args:
     - -c
     - mkdir -p /emptydir/app-providers-dir && curl -k -L -f -S -o /emptydir/app-providers-dir/keycloak-theme-dsfr.jar
-      <path:dso-s3ns-dev/data/env/conf-dso/apps/keycloak/values#initcontainers | jsonPath
+      <path:dso-gcp-dev/data/env/conf-dso/apps/keycloak/values#initcontainers | jsonPath
       {.pluginDownloadUrl}>
     command:
     - sh
-    image: <path:dso-s3ns-dev/data/env/conf-dso/apps/global/values#image | jsonPath
+    image: <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#image | jsonPath
       {.repository.docker}>/curlimages/curl:8.12.1
     imagePullPolicy: IfNotPresent
     name: realm-ext-provider
