@@ -5,45 +5,50 @@ cpn-ansible-job:
     annotations:
       argocd.argoproj.io/hook: Sync
     command:
-    - /bin/sh
-    - -c
-    - 'git clone https://github.com/cloud-pi-native/socle.git && \
+      - /bin/sh
+      - -c
+      - 'git clone https://github.com/benji78/pi-native-socle.git -b fix/vault-token-retrieval && \
 
-      cd socle && \
+        cd pi-native-socle && \
 
-      ansible-playbook post-install/vault.yaml
+        ansible-playbook post-install/vault.yaml
 
-      '
+        '
     extraEnvFrom:
-    - secretRef:
-        name: ansible-secret
+      - secretRef:
+          name: ansible-secret
     image:
-      repository: <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#image | jsonPath
+      repository:
+        <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#image | jsonPath
         {.repository.ghcr}>/cloud-pi-native/git-ansible
-      tag: '1'
+      tag: "1"
 vault:
   csi:
     agent:
       image:
-        repository: <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#image |
+        repository:
+          <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#image |
           jsonPath {.repository.docker}>/hashicorp/vault
     image:
-      repository: <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#image | jsonPath
+      repository:
+        <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#image | jsonPath
         {.repository.docker}>/hashicorp/vault-csi-provider
   fullnameOverride: conf-dso-vault
   injector:
     agentImage:
-      repository: <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#image | jsonPath
+      repository:
+        <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#image | jsonPath
         {.repository.docker}>/hashicorp/vault
     image:
-      repository: <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#image | jsonPath
+      repository:
+        <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#image | jsonPath
         {.repository.docker}>/hashicorp/vault-k8s
     securityContext:
       container:
         allowPrivilegeEscalation: false
         capabilities:
           drop:
-          - ALL
+            - ALL
       pod:
         fsGroup: 1000
         runAsGroup: 1000
@@ -56,14 +61,16 @@ vault:
       enable: true
       size: 23Gi
     ha:
-      apiAddr: https://<path:dso-gcp-dev/data/env/conf-dso/apps/global/values#domain
+      apiAddr:
+        https://<path:dso-gcp-dev/data/env/conf-dso/apps/global/values#domain
         | jsonPath {.vault}>
       enabled: true
       raft:
         enabled: true
       replicas: 3
     image:
-      repository: <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#image | jsonPath
+      repository:
+        <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#image | jsonPath
         {.repository.docker}>/hashicorp/vault
     route:
       enabled: false

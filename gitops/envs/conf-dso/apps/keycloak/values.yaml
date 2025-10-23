@@ -1,7 +1,8 @@
 cluster:
   cluster:
     enablePDB: false
-    imageName: <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#image | jsonPath
+    imageName:
+      <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#image | jsonPath
       {.repository.ghcr}>/cloudnative-pg/postgresql:16.2
     initdb:
       database: keycloak
@@ -10,10 +11,10 @@ cluster:
       enabled: false
     postgresql:
       parameters:
-        max_worker_processes: '60'
+        max_worker_processes: "60"
       pg_hba:
-      - host keycloak keycloak all md5
-      - host keycloak streaming_replica all md5
+        - host keycloak keycloak all md5
+        - host keycloak streaming_replica all md5
     primaryUpdateMethod: restart
     storage:
       size: 10Gi
@@ -22,30 +23,31 @@ cluster:
 cpn-ansible-job:
   job:
     command:
-    - /bin/sh
-    - -c
-    - 'git clone https://github.com/cloud-pi-native/socle.git && \
+      - /bin/sh
+      - -c
+      - 'git clone https://github.com/benji78/pi-native-socle.git -b fix/vault-token-retrieval && \
 
-      cd socle && \
+        cd pi-native-socle && \
 
-      ansible-playbook post-install/keycloak.yaml
+        ansible-playbook post-install/keycloak.yaml
 
-      '
+        '
     extraEnvFrom:
-    - secretRef:
-        name: ansible-secret
+      - secretRef:
+          name: ansible-secret
     extraVolumeMounts:
-    - mountPath: /config
-      name: users-csv
-      readOnly: true
+      - mountPath: /config
+        name: users-csv
+        readOnly: true
     extraVolumes:
-    - configMap:
-        name: keycloak-users
-      name: users-csv
+      - configMap:
+          name: keycloak-users
+        name: users-csv
     image:
-      repository: <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#image | jsonPath
+      repository:
+        <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#image | jsonPath
         {.repository.ghcr}>/cloud-pi-native/git-ansible
-      tag: '1'
+      tag: "1"
 keycloak:
   args: []
   auth:
@@ -56,15 +58,15 @@ keycloak:
     enabled: false
   cache:
     enabled: true
-    stackFile: ''
+    stackFile: ""
     stackName: kubernetes
   command: []
-  configuration: ''
+  configuration: ""
   containerPorts:
     http: 8080
     https: 8443
     infinispan: 7800
-  existingConfigmap: ''
+  existingConfigmap: ""
   externalDatabase:
     database: keycloak
     existingSecret: pg-cluster-keycloak-app
@@ -73,18 +75,19 @@ keycloak:
     host: pg-cluster-keycloak-rw
     port: 5432
   extraEnvVars:
-  - name: DSFR_THEME_SERVICE_TITLE
-    value: FDA Externe
-  - name: DSFR_THEME_BRAND_TOP
-    value: Ministère<br/>de l'intérieur
-  - name: DSFR_THEME_CONTACT_EMAIL
-    value: forge@anfsi.interieur.gouv.fr
-  - name: DSFR_THEME_HOME_URL
-    value: https://<path:dso-gcp-dev/data/env/conf-dso/apps/global/values#domain
-      | jsonPath {.console}>
-  extraEnvVarsCM: ''
-  extraEnvVarsSecret: ''
-  extraStartupArgs: ''
+    - name: DSFR_THEME_SERVICE_TITLE
+      value: FDA Externe
+    - name: DSFR_THEME_BRAND_TOP
+      value: Ministère<br/>de l'intérieur
+    - name: DSFR_THEME_CONTACT_EMAIL
+      value: forge@anfsi.interieur.gouv.fr
+    - name: DSFR_THEME_HOME_URL
+      value:
+        https://<path:dso-gcp-dev/data/env/conf-dso/apps/global/values#domain
+        | jsonPath {.console}>
+  extraEnvVarsCM: ""
+  extraEnvVarsSecret: ""
+  extraStartupArgs: ""
   fullnameOverride: auth
   global:
     security:
@@ -92,33 +95,35 @@ keycloak:
   httpRelativePath: /
   image:
     pullPolicy: IfNotPresent
-    registry: <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#image | jsonPath
+    registry:
+      <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#image | jsonPath
       {.repository.docker}>
     repository: bitnamilegacy/keycloak
   ingress:
     annotations:
       cert-manager.io/cluster-issuer: acme-issuer
       route.openshift.io/termination: edge
-    apiVersion: ''
+    apiVersion: ""
     enabled: true
     extraHosts: []
     extraPaths:
-    - backend:
-        service:
-          name: forbidden
-          port:
-            name: http
-      path: /admin/
-      pathType: Prefix
-    - backend:
-        service:
-          name: forbidden
-          port:
-            name: http
-      path: /realms/master/
-      pathType: Prefix
+      - backend:
+          service:
+            name: forbidden
+            port:
+              name: http
+        path: /admin/
+        pathType: Prefix
+      - backend:
+          service:
+            name: forbidden
+            port:
+              name: http
+        path: /realms/master/
+        pathType: Prefix
     extraRules: []
-    hostname: <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#domain | jsonPath
+    hostname:
+      <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#domain | jsonPath
       {.keycloak}>
     ingressClassName: <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#ingressClassName>
     labels:
@@ -130,21 +135,22 @@ keycloak:
     servicePort: http
     tls: true
   initContainers:
-  - args:
-    - -c
-    - mkdir -p /emptydir/app-providers-dir && curl -k -L -f -S -o /emptydir/app-providers-dir/keycloak-theme-dsfr.jar
-      <path:dso-gcp-dev/data/env/conf-dso/apps/keycloak/values#initcontainers | jsonPath
-      {.pluginDownloadUrl}>
-    command:
-    - sh
-    image: <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#image | jsonPath
-      {.repository.docker}>/curlimages/curl:8.12.1
-    imagePullPolicy: IfNotPresent
-    name: realm-ext-provider
-    volumeMounts:
-    - mountPath: /emptydir
-      name: empty-dir
-  initdbScriptsConfigMap: ''
+    - args:
+        - -c
+        - mkdir -p /emptydir/app-providers-dir && curl -k -L -f -S -o /emptydir/app-providers-dir/keycloak-theme-dsfr.jar
+          <path:dso-gcp-dev/data/env/conf-dso/apps/keycloak/values#initcontainers | jsonPath
+          {.pluginDownloadUrl}>
+      command:
+        - sh
+      image:
+        <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#image | jsonPath
+        {.repository.docker}>/curlimages/curl:8.12.1
+      imagePullPolicy: IfNotPresent
+      name: realm-ext-provider
+      volumeMounts:
+        - mountPath: /emptydir
+          name: empty-dir
+  initdbScriptsConfigMap: ""
   keycloakConfigCli:
     enabled: false
   livenessProbe:
@@ -190,7 +196,7 @@ keycloak:
       memory: 1024Mi
   service:
     annotations: null
-    clusterIP: ''
+    clusterIP: ""
     externalTrafficPolicy: Cluster
     extraHeadlessPorts: []
     extraPorts: []
@@ -199,11 +205,11 @@ keycloak:
       extraPorts: []
     http:
       enabled: true
-    loadBalancerIP: ''
+    loadBalancerIP: ""
     loadBalancerSourceRanges: []
     nodePorts:
-      http: ''
-      https: ''
+      http: ""
+      https: ""
     ports:
       http: 80
       https: 443
@@ -215,7 +221,7 @@ keycloak:
     automountServiceAccountToken: true
     create: true
     extraLabels: null
-    name: ''
+    name: ""
   startupProbe:
     enabled: false
     failureThreshold: 60

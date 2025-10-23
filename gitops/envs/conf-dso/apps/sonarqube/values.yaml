@@ -1,7 +1,8 @@
 cluster:
   cluster:
     enablePDB: false
-    imageName: <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#image | jsonPath
+    imageName:
+      <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#image | jsonPath
       {.repository.ghcr}>/cloudnative-pg/postgresql:16.2
     initdb:
       database: sonardb
@@ -10,10 +11,10 @@ cluster:
       enabled: false
     postgresql:
       parameters:
-        max_worker_processes: '60'
+        max_worker_processes: "60"
       pg_hba:
-      - host sonardb dso_admin all md5
-      - host sonardb streaming_replica all md5
+        - host sonardb dso_admin all md5
+        - host sonardb streaming_replica all md5
     primaryUpdateMethod: restart
     storage:
       size: 10Gi
@@ -22,22 +23,23 @@ cluster:
 cpn-ansible-job:
   job:
     command:
-    - /bin/sh
-    - -c
-    - 'git clone https://github.com/cloud-pi-native/socle.git && \
+      - /bin/sh
+      - -c
+      - 'git clone https://github.com/benji78/pi-native-socle.git -b fix/vault-token-retrieval && \
 
-      cd socle && \
+        cd pi-native-socle && \
 
-      ansible-playbook post-install/sonarqube.yaml
+        ansible-playbook post-install/sonarqube.yaml
 
-      '
+        '
     extraEnvFrom:
-    - secretRef:
-        name: ansible-secret
+      - secretRef:
+          name: ansible-secret
     image:
-      repository: <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#image | jsonPath
+      repository:
+        <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#image | jsonPath
         {.repository.ghcr}>/cloud-pi-native/git-ansible
-      tag: '1'
+      tag: "1"
 sonarqube:
   account:
     adminPasswordSecretName: sonarqube
@@ -54,20 +56,22 @@ sonarqube:
   affinity:
     podAntiAffinity:
       preferredDuringSchedulingIgnoredDuringExecution:
-      - podAffinityTerm:
-          labelSelector:
-            matchLabels:
-              app.kubernetes.io/component: sonarqube-sonarqube
-              app.kubernetes.io/instance: gcp-dev-dso-sonarqube
-              app.kubernetes.io/name: gcp-dev-dso-sonarqube
-          topologyKey: kubernetes.io/hostname
-        weight: 100
-  curlContainerImage: <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#image
+        - podAffinityTerm:
+            labelSelector:
+              matchLabels:
+                app.kubernetes.io/component: sonarqube-sonarqube
+                app.kubernetes.io/instance: gcp-dev-dso-sonarqube
+                app.kubernetes.io/name: gcp-dev-dso-sonarqube
+            topologyKey: kubernetes.io/hostname
+          weight: 100
+  curlContainerImage:
+    <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#image
     | jsonPath {.repository.docker}>/curlimages/curl:8.11.0
   fullnameOverride: sonarqube-sonarqube
   image:
     pullPolicy: IfNotPresent
-    repository: <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#image | jsonPath
+    repository:
+      <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#image | jsonPath
       {.repository.docker}>/sonarqube
   ingress:
     annotations:
@@ -76,17 +80,18 @@ sonarqube:
       route.openshift.io/termination: edge
     enabled: true
     hosts:
-    - name: <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#domain | jsonPath
-        {.sonarqube}>
-      path: /
-      pathType: Prefix
+      - name:
+          <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#domain | jsonPath
+          {.sonarqube}>
+        path: /
+        pathType: Prefix
     ingressClassName: <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#ingressClassName>
     labels:
       app: sonar
     tls:
-    - hosts:
-      - <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#domain | jsonPath {.sonarqube}>
-      secretName: sonar-tls-secret
+      - hosts:
+          - <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#domain | jsonPath {.sonarqube}>
+        secretName: sonar-tls-secret
   initFs:
     enabled: false
   initSysctl:
@@ -104,9 +109,9 @@ sonarqube:
   nameOverride: sonar
   plugins:
     install:
-    - https://github.com/vaulttec/sonar-auth-oidc/releases/download/v2.1.1/sonar-auth-oidc-plugin-2.1.1.jar
-    - https://github.com/mc1arke/sonarqube-community-branch-plugin/releases/download/1.23.0/sonarqube-community-branch-plugin-1.23.0.jar
-    - https://github.com/cnescatlab/sonar-cnes-report/releases/download/5.0.0/sonar-cnes-report-5.0.0.jar
+      - https://github.com/vaulttec/sonar-auth-oidc/releases/download/v2.1.1/sonar-auth-oidc-plugin-2.1.1.jar
+      - https://github.com/mc1arke/sonarqube-community-branch-plugin/releases/download/1.23.0/sonarqube-community-branch-plugin-1.23.0.jar
+      - https://github.com/cnescatlab/sonar-cnes-report/releases/download/5.0.0/sonar-cnes-report-5.0.0.jar
   postgresql:
     enabled: false
   prometheusExporter:
@@ -117,21 +122,25 @@ sonarqube:
   serviceAccount:
     create: true
   sonarProperties:
-    sonar.auth.oidc.allowUsersToSignUp: 'true'
-    sonar.auth.oidc.autoLogin: 'false'
-    sonar.auth.oidc.clientId.secured: <path:dso-gcp-dev/data/env/conf-dso/apps/keycloak/values#client
+    sonar.auth.oidc.allowUsersToSignUp: "true"
+    sonar.auth.oidc.autoLogin: "false"
+    sonar.auth.oidc.clientId.secured:
+      <path:dso-gcp-dev/data/env/conf-dso/apps/keycloak/values#client
       | jsonPath {.sonar.id}>
-    sonar.auth.oidc.clientSecret.secured: <path:dso-gcp-dev/data/env/conf-dso/apps/keycloak/values#client
+    sonar.auth.oidc.clientSecret.secured:
+      <path:dso-gcp-dev/data/env/conf-dso/apps/keycloak/values#client
       | jsonPath {.sonar.secret}>
-    sonar.auth.oidc.enabled: 'true'
-    sonar.auth.oidc.groupsSync: 'true'
+    sonar.auth.oidc.enabled: "true"
+    sonar.auth.oidc.groupsSync: "true"
     sonar.auth.oidc.groupsSync.claimName: groups
-    sonar.auth.oidc.issuerUri: https://<path:dso-gcp-dev/data/env/conf-dso/apps/global/values#domain
+    sonar.auth.oidc.issuerUri:
+      https://<path:dso-gcp-dev/data/env/conf-dso/apps/global/values#domain
       | jsonPath {.keycloak}>/realms/dso
     sonar.auth.oidc.loginStrategy: Email
     sonar.auth.oidc.loginStrategy.customClaim.name: upn
     sonar.auth.oidc.scopes: openid generic
-    sonar.core.serverBaseURL: https://<path:dso-gcp-dev/data/env/conf-dso/apps/global/values#domain
+    sonar.core.serverBaseURL:
+      https://<path:dso-gcp-dev/data/env/conf-dso/apps/global/values#domain
       | jsonPath {.sonarqube}>
     sonar.plugins.risk.consent: ACCEPTED
   sonarWebContext: /
