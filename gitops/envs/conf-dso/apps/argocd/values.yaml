@@ -29,7 +29,7 @@ argocd:
         g, admin, role:admin
 # END ANSIBLE MANAGED BLOCK: rbac
     cm:
-# BEGIN ANSIBLE MANAGED BLOCK: resource.exclusions and oidc.config
+# BEGIN ANSIBLE MANAGED BLOCK: resource.exclusions, oidc.config and resource.customizations
       resource.exclusions: |
         - apiGroups:
           - tekton.dev
@@ -63,13 +63,23 @@ argocd:
           - '*'
           kinds:
           - EphemeralReport
+      resource.customizations.health.grafana.integreatly.org_GrafanaDashboard: |
+        hs = {}
+        hs.status = "Progressing"
+        hs.message = ""
+        if obj.status ~= nil then
+          hs.status = "Healthy"
+          hs.message = "Assumed healthy"
+        end
+        return hs
+      # We need this to be last so rootCA_block will be a sublevel of oidc.config
       oidc.config: |
         issuer: https://<path:dso-gcp-dev/data/env/conf-dso/apps/global/values#domain | jsonPath {.keycloak}>/realms/dso
         requestedScopes: ["openid", "generic"]
         name: Keycloak
         clientID: <path:dso-gcp-dev/data/env/conf-dso/apps/keycloak/values#client | jsonPath {.argo.id}>
         clientSecret: <path:dso-gcp-dev/data/env/conf-dso/apps/keycloak/values#client | jsonPath {.argo.secret}>
-# END ANSIBLE MANAGED BLOCK: resource.exclusions and oidc.config
+# END ANSIBLE MANAGED BLOCK: resource.exclusions, oidc.config and resource.customizations
       admin.enabled: 'false'
       clusterResources: 'true'
       kustomize.buildOptions: --enable-helm

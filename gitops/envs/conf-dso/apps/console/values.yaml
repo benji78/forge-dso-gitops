@@ -94,12 +94,14 @@ console:
       ARGOCD_URL: https://<path:dso-gcp-dev/data/env/conf-dso/apps/global/values#domain|
         jsonPath {.argocd}>/
       ARGO_NAMESPACE: dso-argocd
+      GITLAB_INTERNAL_URL: http://code-webservice-default.dso-gitlab.svc.cluster.local:8181/
       GITLAB_TOKEN: <path:dso-gcp-dev/data/env/conf-dso/apps/gitlab/values#gitlabToken>
       GITLAB_URL: https://<path:dso-gcp-dev/data/env/conf-dso/apps/global/values#domain|
         jsonPath {.gitlab}>/
       HARBOR_ADMIN: admin
       HARBOR_ADMIN_PASSWORD: <path:dso-gcp-dev/data/env/conf-dso/apps/harbor/values#global|
         jsonPath {.harborAdminPassword}>
+      HARBOR_INTERNAL_URL: http://harbor-core.dso-harbor.svc.cluster.local/
       HARBOR_URL: https://<path:dso-gcp-dev/data/env/conf-dso/apps/global/values#domain|
         jsonPath {.harbor}>/
       KEYCLOAK_ADMIN: dsoadmin
@@ -110,12 +112,15 @@ console:
         {.adminUsername}>
       NEXUS_ADMIN_PASSWORD: <path:dso-gcp-dev/data/env/conf-dso/apps/nexus/values#auth|
         jsonPath {.adminPassword}>
+      NEXUS_INTERNAL_URL: http://proxy.dso-nexus.svc.cluster.local:8081/
       NEXUS_URL: https://<path:dso-gcp-dev/data/env/conf-dso/apps/global/values#domain|
         jsonPath {.nexus}>/
+      SONARQUBE_INTERNAL_URL: http://sonarqube-sonarqube.dso-sonarqube.svc.cluster.local:9000/
       SONARQUBE_URL: https://<path:dso-gcp-dev/data/env/conf-dso/apps/global/values#domain|
         jsonPath {.sonarqube}>/
       SONAR_API_TOKEN: <path:dso-gcp-dev/data/env/conf-dso/apps/sonarqube/values#auth|
         jsonPath {.sonarApiToken}>
+      VAULT_INTERNAL_URL: http://conf-dso-secret-active.dso-vault.svc.cluster.local:8200/
       VAULT_TOKEN: <path:dso-gcp-dev/data/env/conf-dso/apps/vault/values#vaultToken>
       VAULT_URL: https://<path:dso-gcp-dev/data/env/conf-dso/apps/global/values#domain|
         jsonPath {.vault}>/
@@ -148,7 +153,6 @@ console:
   ingress:
     annotations:
       cert-manager.io/cluster-issuer: acme-issuer
-      route.openshift.io/termination: edge
     className: <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#ingressClassName>
     enabled: true
     hosts:

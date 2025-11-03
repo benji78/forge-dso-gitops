@@ -24,8 +24,7 @@ grafana:
     adminPassword: <path:dso-gcp-dev/data/env/conf-dso/apps/observability/values#grafana|
       jsonPath {.adminPassword}>
     isOpenShift: false
-    observatorium_url: https://<path:dso-gcp-dev/data/env/conf-dso/apps/global/values#domain
-      | jsonPath {.observatorium}>
+    observatorium_url: http://gcp-dev-dso-observatorium-api.dso-observatorium.svc.cluster.local:8080
   grafana-operator:
     affinity:
       podAntiAffinity:
@@ -101,19 +100,7 @@ observatorium:
           path: roles/gitops/rendering-apps-files/templates/dashboard
           url: https://github.com/cloud-pi-native/socle.git
   ingress:
-    enabled: true
-    hosts:
-    - host: <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#domain | jsonPath
-        {.observatorium}>
-      paths:
-      - path: /
-        pathType: ImplementationSpecific
-    ingressClassName: <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#ingressClassName>
-    tls:
-    - hosts:
-      - <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#domain | jsonPath {.observatorium}>
-      secretName: <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#domain |
-        jsonPath {.observatorium}>-tls
+    enabled: false
   logs:
     enabled: false
     read:

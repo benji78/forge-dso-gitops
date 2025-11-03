@@ -6,7 +6,6 @@ metadata:
   namespace: dso-nexus
   annotations:
     cert-manager.io/cluster-issuer: acme-issuer
-    route.openshift.io/termination: edge
   labels:
     app: nexus
 spec:

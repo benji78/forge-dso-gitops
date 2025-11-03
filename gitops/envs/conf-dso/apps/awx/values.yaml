@@ -1,21 +1,17 @@
 awx:
   AWX:
-    control_plane_ee_image:
-      <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#image
+    control_plane_ee_image: <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#image
       | jsonPath {.repository.quay}>/ansible/awx-ee:24.6.1
     ee_images:
-      - image:
-          <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#image | jsonPath
-          {.repository.quay}>/ansible/awx-ee:24.6.1
-        name: AWX EE (24.6.1)
+    - image: <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#image | jsonPath
+        {.repository.quay}>/ansible/awx-ee:24.6.1
+      name: AWX EE (24.6.1)
     enabled: true
     extra_settings: null
-    image:
-      <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#image | jsonPath
+    image: <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#image | jsonPath
       {.repository.quay}>/ansible/awx
     image_version: 24.6.1
-    init_container_image:
-      <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#image
+    init_container_image: <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#image
       | jsonPath {.repository.quay}>/ansible/awx-ee
     init_container_image_version: 24.6.1
     name: awx-operator
@@ -23,8 +19,7 @@ awx:
       dbName: awx
       enabled: true
       host: pg-cluster-awx-rw
-      password:
-        <path:dso-gcp-dev/data/env/conf-dso/apps/awx/values#auth | jsonPath
+      password: <path:dso-gcp-dev/data/env/conf-dso/apps/awx/values#auth | jsonPath
         {.adminPassword}>
       port: 5432
       sslmode: prefer
@@ -32,20 +27,17 @@ awx:
       username: awx
     rbac:
       create: true
-    redis_image:
-      <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#image | jsonPath
+    redis_image: <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#image | jsonPath
       {.repository.quay}>/redis
-    redis_image_version: "7"
+    redis_image_version: '7'
     spec:
-      ingress_annotations: "- {'cert-manager.io/cluster-issuer': 'acme-issuer',
-        'route.openshift.io/termination': 'edge'}
+      ingress_annotations: '- {''cert-manager.io/cluster-issuer'': ''acme-issuer''}
 
-        "
+        '
       ingress_class_name: <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#ingressClassName>
       ingress_hosts:
-        - hostname:
-            <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#domain |
-            jsonPath {.awx}>
+      - hostname: <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#domain |
+          jsonPath {.awx}>
       ingress_type: ingress
       service_type: ClusterIP
 cluster:
@@ -60,28 +52,28 @@ cluster:
       enabled: false
     postgresql:
       pg_hba:
-        - host awx awx all md5
-        - host awx streaming_replica all md5
+      - host awx awx all md5
+      - host awx streaming_replica all md5
     primaryUpdateMethod: restart
   fullnameOverride: pg-cluster-awx
   nameOverride: pg-cluster-awx
 cpn-ansible-job:
   job:
     command:
-      - /bin/sh
-      - -c
-      - 'git clone https://github.com/benji78/pi-native-socle.git -b fix/vault-token-retrieval -b fix/vault-token-retrieval && \
+    - /bin/sh
+    - -c
+    - 'git clone https://github.com/benji78/pi-native-socle.git -b fix/vault-token-retrieval
+      && \
 
-        cd pi-native-socle && \
+      cd pi-native-socle && \
 
-        ansible-playbook post-install/awx-oidc.yaml
+      ansible-playbook post-install/awx-oidc.yaml
 
-        '
+      '
     extraEnvFrom:
-      - secretRef:
-          name: ansible-secret
+    - secretRef:
+        name: ansible-secret
     image:
-      repository:
-        <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#image | jsonPath
+      repository: <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#image | jsonPath
         {.repository.ghcr}>/cloud-pi-native/git-ansible
-      tag: "1"
+      tag: '1'

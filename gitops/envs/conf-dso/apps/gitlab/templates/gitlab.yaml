@@ -143,7 +143,6 @@ spec:
         ingress:
           annotations:
             cert-manager.io/cluster-issuer: acme-issuer
-            route.openshift.io/termination: edge
           class: <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#ingressClassName>
           configureCertmanager: false
           labels: null
