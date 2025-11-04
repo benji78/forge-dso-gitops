@@ -94,7 +94,7 @@ console:
       ARGOCD_URL: https://<path:dso-gcp-dev/data/env/conf-dso/apps/global/values#domain|
         jsonPath {.argocd}>/
       ARGO_NAMESPACE: dso-argocd
-      GITLAB_INTERNAL_URL: http://code-webservice-default.dso-gitlab.svc.cluster.local:8181/
+      GITLAB_INTERNAL_URL: http://gitlab-webservice-default.dso-gitlab.svc.cluster.local:8181/
       GITLAB_TOKEN: <path:dso-gcp-dev/data/env/conf-dso/apps/gitlab/values#gitlabToken>
       GITLAB_URL: https://<path:dso-gcp-dev/data/env/conf-dso/apps/global/values#domain|
         jsonPath {.gitlab}>/
