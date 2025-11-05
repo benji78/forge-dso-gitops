@@ -1,19 +1,6 @@
 awx:
   AWX:
-    control_plane_ee_image: <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#image
-      | jsonPath {.repository.quay}>/ansible/awx-ee:24.6.1
-    ee_images:
-    - image: <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#image | jsonPath
-        {.repository.quay}>/ansible/awx-ee:24.6.1
-      name: AWX EE (24.6.1)
     enabled: true
-    extra_settings: null
-    image: <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#image | jsonPath
-      {.repository.quay}>/ansible/awx
-    image_version: 24.6.1
-    init_container_image: <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#image
-      | jsonPath {.repository.quay}>/ansible/awx-ee
-    init_container_image_version: 24.6.1
     name: awx-operator
     postgres:
       dbName: awx
@@ -27,10 +14,19 @@ awx:
       username: awx
     rbac:
       create: true
-    redis_image: <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#image | jsonPath
-      {.repository.quay}>/redis
-    redis_image_version: '7'
     spec:
+      control_plane_ee_image: <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#image
+        | jsonPath {.repository.quay}>/ansible/awx-ee:24.6.1
+      ee_images:
+      - image: <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#image | jsonPath
+          {.repository.quay}>/ansible/awx-ee:24.6.1
+        name: AWX EE (24.6.1)
+      extra_settings:
+      - setting: CSRF_TRUSTED_ORIGINS
+        value: '["https://awx.dev.snc.bbordes.fr"]'
+      image: <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#image | jsonPath
+        {.repository.quay}>/ansible/awx
+      image_version: 24.6.1
       ingress_annotations: '- {''cert-manager.io/cluster-issuer'': ''acme-issuer''}
 
         '
@@ -39,6 +35,12 @@ awx:
       - hostname: <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#domain |
           jsonPath {.awx}>
       ingress_type: ingress
+      init_container_image: <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#image
+        | jsonPath {.repository.quay}>/ansible/awx-ee
+      init_container_image_version: 24.6.1
+      redis_image: <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#image |
+        jsonPath {.repository.quay}>/redis
+      redis_image_version: '7'
       service_type: ClusterIP
 cluster:
   cluster:
@@ -70,9 +72,6 @@ cpn-ansible-job:
       ansible-playbook post-install/awx-oidc.yaml
 
       '
-    extraEnvFrom:
-    - secretRef:
-        name: ansible-secret
     image:
       repository: <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#image | jsonPath
         {.repository.ghcr}>/cloud-pi-native/git-ansible

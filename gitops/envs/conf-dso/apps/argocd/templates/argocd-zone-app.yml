@@ -1,0 +1,48 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: zone-default-project
+  namespace: dso-argocd
+spec:
+  description: "Projet contenant l'Application responsable de tous les déploiements par zone"
+  clusterResourceWhitelist:
+  - group: '*'
+    kind: '*'
+  sourceRepos:
+    - https://cloud-pi-native.github.io/helm-charts
+    - https://code.dev.snc.bbordes.fr/forge/infra/default.git
+  destinations:
+    - namespace: dso-argocd
+      server: "https://kubernetes.default.svc"
+
+---      
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: zone-default-app
+  namespace: dso-argocd
+spec:
+  destination:
+    namespace: dso-argocd
+    server: https://kubernetes.default.svc
+  project: zone-default-project
+  sources:
+  - chart: dso-argocd-zone
+    targetRevision: '>=1.0.0 <2.0.0'
+    repoURL: https://cloud-pi-native.github.io/helm-charts
+    helm:
+      valueFiles:
+      - ./values.yaml
+      - $argocdValues/argocd-values.yaml
+      values: |
+        dsoZoneRepo: https://code.dev.snc.bbordes.fr/forge/infra/default.git
+  - repoURL: https://code.dev.snc.bbordes.fr/forge/infra/default.git
+    targetRevision: HEAD
+    ref: argocdValues
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true
+    - ServerSideApply=true
