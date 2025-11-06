@@ -90,13 +90,13 @@ harbor:
     ingress:
       annotations:
         cert-manager.io/cluster-issuer: acme-issuer
-        labels: null
       className: <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#ingressClassName>
       hosts:
         core: <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#domain | jsonPath
           {.harbor}>
         notary: <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#domain | jsonPath
           {.harborNotary}>
+      labels: null
     tls:
       certSource: secret
       enabled: true
