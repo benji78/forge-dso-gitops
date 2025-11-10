@@ -112,7 +112,7 @@ console:
         {.adminUsername}>
       NEXUS_ADMIN_PASSWORD: <path:dso-gcp-dev/data/env/conf-dso/apps/nexus/values#auth|
         jsonPath {.adminPassword}>
-      NEXUS_INTERNAL_URL: http://proxy.dso-nexus.svc.cluster.local:8081/
+      NEXUS_INTERNAL_URL: http://nexus.dso-nexus.svc.cluster.local:8081/
       NEXUS_URL: https://<path:dso-gcp-dev/data/env/conf-dso/apps/global/values#domain|
         jsonPath {.nexus}>/
       SONARQUBE_INTERNAL_URL: http://sonarqube-sonarqube.dso-sonarqube.svc.cluster.local:9000/
@@ -120,7 +120,7 @@ console:
         jsonPath {.sonarqube}>/
       SONAR_API_TOKEN: <path:dso-gcp-dev/data/env/conf-dso/apps/sonarqube/values#auth|
         jsonPath {.sonarApiToken}>
-      VAULT_INTERNAL_URL: http://conf-dso-secret-active.dso-vault.svc.cluster.local:8200/
+      VAULT_INTERNAL_URL: http://conf-dso-vault-active.dso-vault.svc.cluster.local:8200/
       VAULT_TOKEN: <path:dso-gcp-dev/data/env/conf-dso/apps/vault/values#vaultToken>
       VAULT_URL: https://<path:dso-gcp-dev/data/env/conf-dso/apps/global/values#domain|
         jsonPath {.vault}>/
