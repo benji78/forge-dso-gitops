@@ -24,8 +24,7 @@ cpn-ansible-job:
     command:
     - /bin/sh
     - -c
-    - 'git clone https://github.com/benji78/pi-native-socle.git -b fix/vault-token-retrieval
-      && \
+    - 'git clone https://github.com/benji78/pi-native-socle.git -b develop && \
 
       cd pi-native-socle && \
 
@@ -190,13 +189,13 @@ keycloak:
     requests:
       memory: 1024Mi
   service:
-    annotations: null
+    annotations: {}
     clusterIP: ''
     externalTrafficPolicy: Cluster
     extraHeadlessPorts: []
     extraPorts: []
     headless:
-      annotations: null
+      annotations: {}
       extraPorts: []
     http:
       enabled: true
@@ -209,13 +208,13 @@ keycloak:
       http: 80
       https: 443
     sessionAffinity: None
-    sessionAffinityConfig: null
+    sessionAffinityConfig: {}
     type: ClusterIP
   serviceAccount:
-    annotations: null
+    annotations: {}
     automountServiceAccountToken: true
     create: true
-    extraLabels: null
+    extraLabels: {}
     name: ''
   startupProbe:
     enabled: false
