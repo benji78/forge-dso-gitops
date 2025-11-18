@@ -108,8 +108,7 @@ console:
       KEYCLOAK_ADMIN_PASSWORD: <path:dso-gcp-dev/data/env/conf-dso/apps/keycloak/values#auth|
         jsonPath {.adminPassword}>
       KEYCLOAK_URL: http://auth.dso-keycloak.svc.cluster.local/realms/dso/.well-known/openid-configuration
-      NEXUS_ADMIN: <path:dso-gcp-dev/data/env/conf-dso/apps/nexus/values#auth| jsonPath
-        {.adminUsername}>
+      NEXUS_ADMIN: admin
       NEXUS_ADMIN_PASSWORD: <path:dso-gcp-dev/data/env/conf-dso/apps/nexus/values#auth|
         jsonPath {.adminPassword}>
       NEXUS_INTERNAL_URL: http://nexus.dso-nexus.svc.cluster.local:8081/
