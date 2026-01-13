@@ -10,8 +10,7 @@ gitlabrunner:
           topologyKey: kubernetes.io/hostname
         weight: 100
   fullnameOverride: gitlab-runner
-  gitlabUrl: https://<path:dso-gcp-dev/data/env/conf-dso/apps/global/values#domain
-    | jsonPath {.gitlab}>/
+  gitlabUrl: http://gitlab-webservice-default.dso-gitlab.svc.cluster.local:8181/
   image:
     registry: <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#image | jsonPath
       {.repository.gitlab}>
