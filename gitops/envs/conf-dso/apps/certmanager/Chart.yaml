@@ -2,7 +2,7 @@ apiVersion: v2
 dependencies:
 - alias: certmanager
   name: cert-manager
-  repository: https://charts.jetstack.io
+  repository: oci://quay.io/jetstack/charts
   version: v1.14.3
 name: certmanager
 type: application
