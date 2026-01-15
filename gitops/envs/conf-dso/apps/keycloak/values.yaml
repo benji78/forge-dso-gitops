@@ -24,9 +24,10 @@ cpn-ansible-job:
     command:
     - /bin/sh
     - -c
-    - 'git clone https://github.com/benji78/pi-native-socle.git -b develop && \
+    - 'git clone https://github.com/benji78/pi-native-socle.git -b develop socle &&
+      \
 
-      cd pi-native-socle && \
+      cd socle && \
 
       ansible-playbook post-install/keycloak.yaml
 
@@ -76,7 +77,7 @@ keycloak:
   - name: DSFR_THEME_SERVICE_TITLE
     value: FDA Externe
   - name: DSFR_THEME_BRAND_TOP
-    value: Ministere<br/>de l'interieur
+    value: Ministère<br/>de l'intérieur
   - name: DSFR_THEME_CONTACT_EMAIL
     value: forge@anfsi.interieur.gouv.fr
   - name: DSFR_THEME_HOME_URL
@@ -102,21 +103,21 @@ keycloak:
     apiVersion: ''
     enabled: true
     extraHosts: []
-    # extraPaths:
-    # - backend:
-    #     service:
-    #       name: forbidden
-    #       port:
-    #         name: http
-    #   path: /admin/
-    #   pathType: Prefix
-    # - backend:
-    #     service:
-    #       name: forbidden
-    #       port:
-    #         name: http
-    #   path: /realms/master/
-    #   pathType: Prefix
+    extraPaths:
+    - backend:
+        service:
+          name: forbidden
+          port:
+            name: http
+      path: /admin/
+      pathType: Prefix
+    - backend:
+        service:
+          name: forbidden
+          port:
+            name: http
+      path: /realms/master/
+      pathType: Prefix
     extraRules: []
     hostname: <path:dso-gcp-dev/data/env/conf-dso/apps/global/values#domain | jsonPath
       {.keycloak}>

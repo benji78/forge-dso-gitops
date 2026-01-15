@@ -7,9 +7,10 @@ cpn-ansible-job:
     command:
     - /bin/sh
     - -c
-    - 'git clone https://github.com/benji78/pi-native-socle.git -b develop && \
+    - 'git clone https://github.com/benji78/pi-native-socle.git -b develop socle &&
+      \
 
-      cd pi-native-socle && \
+      cd socle && \
 
       ansible-playbook post-install/vault.yaml
 
